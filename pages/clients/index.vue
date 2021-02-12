@@ -12,9 +12,9 @@
     <AppDataList :items="filteredClients" link="id" link-to="/clients/:id" with-options>
       <template slot="head" slot-scope="props">
         <div class="profile">
-          <AccountCircleIcon class="client-profile SvgIcon--32" />
+          <AccountCircleIcon class="client-profile SvgIcon--32" /> <!-- TODO CHANGE DEPENING COMPANY -->
           <div class="profile">
-            {{ props.item.contact.firstname }}
+            {{ props.item.contact.firstname }} <!-- TODO CHANGE DEPENING COMPANY -->
             <ChevronIcon right />
           </div>
         </div>
