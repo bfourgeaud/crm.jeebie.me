@@ -26,8 +26,8 @@ export default {
           name: '',
           siret: '',
           tva: '',
-          addr: '',
-          addrFact: ''
+          addr: { text: '', exact: null },
+          addrFact: { text: '', exact: null }
         },
         contact: {
           firstname: '',
@@ -35,7 +35,7 @@ export default {
           mobile: '',
           phone: '',
           email: '',
-          addr: ''
+          addr: { text: '', exact: null }
         }
       })
     }

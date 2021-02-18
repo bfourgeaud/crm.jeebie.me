@@ -1,32 +1,44 @@
 <template>
-  <div class="text-lg font-normal">
-    <label v-if="label" class="block text-gray-700 font-medium mb-2" for="email">
-      {{ label }}
-    </label>
-    <input
-      v-model="input"
-      class="py-4 px-3 appearance-none border border-grey-200 rounded w-full text-gray-700 leading-tight focus:outline-none relative"
-      :placeholder="placeholder"
-      :type="type"
-      :name="name"
-      autocomplete="off"
-      :readonly="!service"
-      @keydown="showSearchResults = true"
-      @blur="showSearchResults = false"
-    >
-    <ul v-if="showSearchResults" class="search-results">
-      <li v-for="(result, i) in searchResults" :key="i" class="item" @click="input = result">
-        {{ result }}
-      </li>
-    </ul>
-  </div>
+  <BaseInput
+    v-model="searchTxt"
+    v-click-outside="() => showSuggest(false)"
+    :name="name"
+    :label="label"
+    :type="type"
+    :placeholder="placeholder"
+    :autocomplete-items="searchResults"
+    :autocomplete-show="suggestOpened"
+    @update-autocomplete="showSuggest($event)"
+    @autocomplete-selected="setRes"
+  >
+    <template slot-scope="row" name="autocomplete">
+      <BaseIcon icon="location" :size="24" class="mx-4 text-opacity-light group-hover:text-opacity-dark" />
+      <b class="mr-2">
+        {{ formatName (row.item) }}
+      </b>
+      <p class="font-medium text-opacity-dark">
+        {{ `${row.item.properties.city}, ${row.item.properties.state}, ${row.item.properties.country}` }}
+      </p>
+    </template>
+  </BaseInput>
 </template>
 
 <script>
+import ClickOutside from 'vue-click-outside'
+
 export default {
   name: 'AppInputAddr',
+  directives: {
+    ClickOutside
+  },
   props: {
-    value: { type: [String, Array, Boolean], default: null },
+    value: {
+      type: [Object],
+      default: () => ({
+        text: '',
+        exact: null
+      })
+    },
     label: { type: String, default: null },
     type: { type: String, default: 'text' },
     name: { type: String, default: '' },
@@ -35,20 +47,9 @@ export default {
   data () {
     return {
       lazyValue: this.value,
+      lazySuggest: '',
       searchResults: [],
-      showSearchResults: false,
-      service: null
-    }
-  },
-  head () {
-    return {
-      script: [{
-        src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDTivtdgz-KjijymcSS3tvl7IM9I2wz5Nk&libraries=places',
-        defer: true,
-        callback: () => {
-          this.service = new window.google.maps.places.AutocompleteService()
-        }
-      }]
+      suggestOpened: false
     }
   },
   computed: {
@@ -58,55 +59,57 @@ export default {
       },
       set (val) {
         this.lazyValue = val
-        this.service.getPlacePredictions({
-          input: val,
-          types: ['address']
-        }, this.displaySuggestions)
         this.$emit('input', val)
+      }
+    },
+    searchTxt: {
+      get () {
+        return this.lazyValue.text
+      },
+      set (val) {
+        this.lazyValue = val
+        this.$maps.searchAddr(val, { limit: 5, lang: 'fr' }, (res) => {
+          this.searchResults = res.features
+        })
+        this.$emit('input', { text: val, exact: null })
       }
     }
   },
   watch: {
-    value (newValue) {
-      this.lazyValue = newValue
+    value (val) {
+      this.lazyValue = val
     }
   },
   methods: {
-    MapsInit () {
-      this.service = new window.google.maps.places.AutocompleteService()
+    showSuggest (val) {
+      this.suggestOpened = val
     },
-    displaySuggestions (predictions, status) {
-      if (status !== window.google.maps.places.PlacesServiceStatus.OK) {
-        this.searchResults = []
-        return
+    setRes (e) {
+      this.showSuggest(false)
+      this.input = {
+        text: this.formatAddr(e.properties),
+        exact: e
       }
-      this.searchResults = predictions.map(prediction => prediction.description)
+    },
+    formatAddr (props) {
+      switch (props.type) {
+        case 'street' :
+          return `${props.name}, ${props.postcode} ${props.city}, ${props.country}`
+        case 'house' :
+          return `${props.housenumber ? props.housenumber : ''} ${props.street}, ${props.postcode} ${props.city}, ${props.country}`
+        case 'locality' :
+          return `${props.name}, ${props.state}, ${props.country}`
+        case 'city' :
+          return `${props.name}, ${props.state}, ${props.country}`
+        case 'country' :
+          return `${props.name}, ${props.country}`
+      }
+      return `${props.name}`
+    },
+    formatName (item) {
+      const props = item.properties
+      return props.name ? props.name : `${props.housenumber ? props.housenumber : ''} ${props.street}`
     }
   }
 }
 </script>
-
-<style scoped>
-.search-results {
-  @apply bg-white;
-  @apply text-blue-light;
-  @apply fixed;
-  @apply text-left;
-  @apply rounded;
-  @apply mt-1;
-  @apply overflow-hidden;
-  box-shadow: 0 1px 10px rgb(0 0 0 / 20%), 0 2px 4px 0 rgb(0 0 0 / 10%);
-}
-
-.search-results .item {
-  @apply mt-px;
-  @apply cursor-pointer;
-  @apply p-2;
-  @apply flex;
-}
-
-.search-results .item:hover {
-  @apply bg-blue-light;
-  @apply text-white;
-}
-</style>

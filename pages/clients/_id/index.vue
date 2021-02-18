@@ -7,7 +7,8 @@
           <div class="text-opacity-dark text-base p-2 lg:p-4 flex-shrink">
             <div class="text-black">{{ client.contact.firstname }} {{ client.contact.lastname }}</div>
             <div v-if="client.isCompany" class="text-black">{{ client.company.name }}</div>
-            <div>{{ client.isCompany ? client.company.addr : client.contact.addr }}</div>
+            <div>{{ formatAddr(client).street }}</div>
+            <div>{{ formatAddr(client).line2 }}</div>
             <a :href="`mailto:${client.contact.email}`" class="underline">{{ client.contact.email }}</a>
           </div>
           <BaseCardActions class="mx-4">
@@ -137,6 +138,17 @@ export default {
         'text-warning': status === 'envoyée',
         'text-success': status === 'payée',
         'text-opacity-400': status === 'brouillon'
+      }
+    },
+    formatAddr (client) {
+      const addrField = client.isCompany ? client.company.addr : client.contact.addr
+      const exact = addrField.exact ? addrField.exact.properties : null
+      return {
+        street: exact ? `${exact.housenumber || ''} ${exact.street || exact.name || ''}` : addrField.text,
+        postcode: exact ? exact.postcode || '' : '',
+        city: exact ? exact.city || exact.state || '' : '',
+        country: exact ? exact.country || '' : '',
+        line2: exact ? `${exact.postcode || ''} ${exact.city || exact.state || ''}, ${exact.country || ''}` : ''
       }
     }
   }

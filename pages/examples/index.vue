@@ -1,48 +1,42 @@
 <template>
   <div class="container">
-    <BaseCard :elevation="6" rounded>
-      <BaseCardTitle>Card title</BaseCardTitle>
-      <BaseCardSubtitle>Subtitle</BaseCardSubtitle>
-      <BaseCardText> Greyhound divisively hello coldly wonderfully marginally far upon excluding. </BaseCardText>
-      <BaseCardActions>
-        <BaseBtn>
-          <div>
-            <EditIcon class="SvgIcon--24" />
-          </div>
-          Action 1
-        </BaseBtn>
-        <BaseSpacer />
-        <BaseBtn outlined class="text-blue-light">
-          Action 2
-        </BaseBtn>
-      </BaseCardActions>
-    </BaseCard>
-
-    <div class="flex items-center justify-center bg-red-dark font-sans leading-normal">
-      <div class="bg-red-light">
-        <div class="group hover:bg-blue-light">
-          <p class="text-dark group-hover:text-white">New Project</p>
-          <p class="text-dark group-hover:text-white">Create a new project from a variety of starting templates.</p>
-        </div>
-      </div>
-    </div>
+    <BaseInput
+      v-model="inputVal"
+      v-click-outside="hideSuggest"
+      :autocomplete-items="['Item 1', 'Item 2', 'Item 3']"
+      :autocomplete-show="opened"
+      @update-autocomplete="opened = $event"
+      @autocomplete-selected="fillAC"
+    >
+      <template slot-scope="item" name="autocomplete">
+        {{ item }}
+      </template>
+    </BaseInput>
   </div>
 </template>
 
 <script>
+import ClickOutside from 'vue-click-outside'
+
 export default {
   name: 'Examples',
+  directives: {
+    ClickOutside
+  },
+  data () {
+    return {
+      inputVal: '',
+      opened: false
+    }
+  },
   methods: {
-    editItem (item) {
-      alert('Edit !')
+    hideSuggest () {
+      this.opened = false
     },
-    deleteItem (item) {
-      alert('Delete !')
+    fillAC (e) {
+      this.inputVal = e
+      this.hideSuggest()
     }
   }
 }
 </script>
-
-<style>
-
-</style>

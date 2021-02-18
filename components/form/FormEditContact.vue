@@ -3,12 +3,12 @@
   <div>
     <AppSubTitle title="Coordonées du client" />
     <div class="grid grid-cols-2 gap-4">
-      <AppInput v-model="contact.firstname" type="text" name="firstname" placeholder="Nom" />
-      <AppInput v-model="contact.lastname" type="text" name="lastname" placeholder="Prénom" />
-      <AppInput v-model="contact.mobile" type="text" name="mobile" placeholder="Téléphone Mobile" />
-      <AppInput v-model="contact.phone" type="text" name="phone" placeholder="Téléphone Fixe" />
-      <AppInput v-model="contact.email" type="email" name="email" placeholder="Adresse e-mail" class="col-span-2" />
-      <AppInput v-if="!noAddr" v-model="contact.addr" type="text" name="addr" placeholder="Adresse postale" class="col-span-2" />
+      <BaseInput v-model="contact.firstname" type="text" name="firstname" placeholder="Nom" />
+      <BaseInput v-model="contact.lastname" type="text" name="lastname" placeholder="Prénom" />
+      <BaseInput v-model="contact.mobile" type="text" name="mobile" placeholder="Téléphone Mobile" />
+      <BaseInput v-model="contact.phone" type="text" name="phone" placeholder="Téléphone Fixe" />
+      <BaseInput v-model="contact.email" type="email" name="email" placeholder="Adresse e-mail" class="col-span-2" />
+      <AppInputAddress v-if="!noAddr" v-model="contact.addr" type="text" name="addr" placeholder="Adresse postale" class="col-span-2" />
     </div>
   </div>
 </template>
@@ -25,7 +25,10 @@ export default {
         mobile: '',
         phone: '',
         email: '',
-        addr: ''
+        addr: {
+          text: '',
+          exact: null
+        }
       })
     },
     noAddr: { type: Boolean, default: false }
