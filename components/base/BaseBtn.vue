@@ -85,31 +85,32 @@ export default {
 .btn.btn--xbold {
   @apply font-extrabold;
 }
+
 .btn:not(.btn--round):not(.btn--size-unset){
   @apply h-8;
   min-width: 64px;
   @apply px-4;
 }
 
-.btn.size--large {
+.btn.size--large:not(.btn--size-unset) {
   @apply h-12;
   min-width: 78px;
   @apply px-5;
 }
 
-.btn.size--small {
+.btn.size--small:not(.btn--size-unset) {
   @apply h-6;
   min-width: 50px;
   @apply px-3;
 }
 
-.btn.size--xlarge {
+.btn.size--xlarge:not(.btn--size-unset) {
   @apply h-16;
   min-width: 92px;
   @apply px-6;
 }
 
-.btn.size--xsmall {
+.btn.size--xsmall:not(.btn--size-unset) {
   @apply h-5;
   min-width: 36px;
   @apply px-2;
