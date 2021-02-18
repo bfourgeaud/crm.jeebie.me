@@ -1,10 +1,10 @@
 <template>
-  <nuxt-link :to="to" class="px-2 py-8 flex justify-between items-center">
-    <div class="flex items-center">
-      <div v-if="icon" class="mx-2 flex items-center justify-center">
-        <component :is="`${icon}-icon`" class="icon" :class="iconColor ? iconColor : ''" />
+  <nuxt-link :to="to" class="md:px-2 md:py-8 flex justify-center md:justify-between items-center" @click.native="RESET_OMNI">
+    <div class="flex flex-col md:flex-row items-center">
+      <div v-if="icon" class="mx-2 flex items-center justify-center mb-1 md:mb-0">
+        <BaseIcon :icon="icon" :size="24" :class="iconColor ? iconColor : ''" />
       </div>
-      <span>
+      <span class="item-label text-xs md:text-sm">
         <slot />
       </span>
     </div>
@@ -15,13 +15,16 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   name: 'AppNavLink',
   props: {
     to: { type: String, default: '#' },
     icon: { type: String, default: null },
     iconColor: { type: String, default: null }
-  }
+  },
+  methods: { ...mapMutations('app', ['RESET_OMNI']) }
 }
 </script>
 
@@ -38,7 +41,14 @@ a.nuxt-link-active, a:hover {
   opacity: 100%;
 }
 
-a:hover .chevron {
-  @apply flex animate-oscilliate;
+@screen md {
+  a:hover .chevron {
+    @apply flex;
+    @apply animate-oscilliate;
+  }
+}
+
+.item-label {
+  white-space: nowrap;
 }
 </style>

@@ -5,14 +5,7 @@
   </div>
 </template>
 
-<style>
-body {
-  overflow: hidden;
-  font-weight: 500;
-  color: white;
-  font-size: 0.875rem;
-}
-
+<style scoped>
 .auth-layout {
   height: 100vh;
   width: 100%;

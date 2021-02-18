@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-4 text-lg font-normal">
+  <div class="text-lg font-normal">
     <label v-if="label" class="block text-gray-700 font-medium mb-2" for="email">
       {{ label }}
     </label>

@@ -1,12 +1,14 @@
 <template>
-  <div class="mx-auto text-center">
+  <div class="container text-center pb-16">
     <AppSubTitle title="Informations concernant votre client" class="mt-8" />
     <FormToggle v-model="lazyClient.isCompany" true-str="Entreprise" false-str="Particulier" class="mb-8" />
-    <FormEditCompany v-if="lazyClient.isCompany" v-model="lazyClient.company" />
+    <FormEditCompany v-if="lazyClient.isCompany" v-model="lazyClient.company" class="mb-4" />
     <FormEditContact v-model="lazyClient.contact" :no-addr="lazyClient.isCompany" />
-    <AppBtn @click="submit">
-      CONFIRMER
-    </AppBtn>
+    <div class="flex justify-center items-center">
+      <AppBtn class="btn-primary mt-8" rounded large @click="submit">
+        CONFIRMER
+      </AppBtn>
+    </div>
   </div>
 </template>
 
@@ -52,3 +54,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.container {
+  max-width: 480px;
+}
+</style>

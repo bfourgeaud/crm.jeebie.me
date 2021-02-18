@@ -1,5 +1,6 @@
 <template>
-  <component :is="to ? 'NuxtLink' : 'div'" :to="to ? resolvedLink : ''" class="row">
+  <component :is="to ? 'NuxtLink' : 'div'" :to="to" class="row data-row">
+    <slot />
     <div class="row-head">
       <slot name="head" />
     </div>
@@ -15,43 +16,39 @@ export default {
   props: {
     to: { type: String, default: null },
     item: { type: Object, default: () => null }
-  },
-  computed: {
-    resolvedLink () {
-      let link = this.to
-      const regex = /\/:\w+/gm
-      const found = link.match(regex)
-      found.forEach((element) => {
-        link = link.replace(element, `/${this.item[element.substring(2)]}`)
-      })
-      return link
-    }
   }
 }
 </script>
 
 <style scoped>
 .row {
-    -webkit-transition: all .2s;
     transition: all .2s;
     cursor: pointer;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
     justify-content: space-between;
 }
 
+.data-row.before {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.data-row {
+    /*height: 64px;*/
+    box-shadow: 0 2px 0 rgb(0 0 0 / 12%);
+    background-color: #fff;
+    padding: 5px 5px;
+    margin-bottom: 1px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
 .row-head .label, .row-head {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
     align-items: center;
 }
 
-.row:hover {
+.row:hover, .row:hover .row-head, .row:hover .row-actions {
     color: #0057e7;
     background-color: #d0e7fb;
 }
@@ -67,8 +64,6 @@ export default {
 }
 
 .row-actions {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
     -ms-flex-align: center;

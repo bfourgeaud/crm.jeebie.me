@@ -13,6 +13,10 @@ export const mutations = {
 
   ADD_CLIENT: (state, client) => {
     state.clients.push(client)
+  },
+
+  REMOVE_CLIENT: (state, index) => {
+    state.clients.slice(index, 1)
   }
 }
 
@@ -21,28 +25,23 @@ export const getters = {
 }
 
 export const actions = {
-  async fetchClients ({ commit }) {
-    const collection = this.app.$fire.firestore.collection('clients')
-    try {
-      const snapshot = await collection.get()
-      const clients = []
-      snapshot.forEach((doc) => {
-        clients.push({ id: doc.id, ...doc.data() })
-      })
-      commit('SET_CLIENTS', clients)
-    } catch (e) {
-      alert(e)
-    }
+  fetchClients ({ commit }) {
+    this.app.$dbs.clients.index(
+      (res) => { commit('SET_CLIENTS', res) },
+      (err) => { alert(err) }
+    )
   },
 
   addClient ({ state, commit }, client) {
-    const collection = this.app.$fire.firestore.collection('clients')
-    collection.add(client)
-      .then((docRef) => {
-        commit('ADD_CLIENT', client)
-      })
-      .catch((error) => {
-        alert(error)
-      })
+    this.app.$dbs.clients.create(
+      client,
+      null,
+      (err) => { alert(err) }
+    )
+  },
+
+  removeClient ({ state, commit }, id) {
+    const newList = state.clients.filter(c => c.id !== id)
+    commit('SET_CLIENTS', newList)
   }
 }

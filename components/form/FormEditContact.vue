@@ -1,3 +1,4 @@
+/* eslint-disable vue/max-attributes-per-line */
 <template>
   <div>
     <AppSubTitle title="Coordonées du client" />

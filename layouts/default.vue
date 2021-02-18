@@ -1,17 +1,20 @@
 <template>
   <div class="app-layout">
     <app-header class="header bg-blue-light" />
-    <app-nav class="nav bg-blue-dark" />
     <Nuxt class="content text-blue-dark" />
+    <AppCover />
+    <app-nav class="nav bg-blue-dark" />
   </div>
 </template>
 
 <style>
 body {
   overflow: hidden;
-  font-weight: 500;
+  font-weight: 700;
   color: white;
   font-size: 0.875rem;
+  line-height: 1.25;
+  background-color: #f8fbff;
 }
 
 .app-layout {
@@ -23,6 +26,8 @@ body {
                        "nav";
   grid-template-rows: 55px 1fr 64px;
   grid-template-columns: 1fr;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .header {
@@ -33,7 +38,23 @@ body {
 }
 .content {
   grid-area: content;
-  overflow: auto;
+}
+
+/* DELETE */
+.SvgIcon--24{
+  height: 24px;
+}
+
+.SvgIcon--32 {
+  height: 32px;
+}
+
+.SvgIcon--40 {
+  height: 40px;
+}
+
+.SvgIcon--64 {
+  height: 64px;
 }
 
 /*
@@ -46,6 +67,18 @@ body {
                          "nav content";
     grid-template-rows: 70px 1fr;
     grid-template-columns: 220px 1fr;
+  }
+}
+
+/* PUT GLOBAL */
+.content.container {
+  @apply w-full;
+  @apply overflow-x-hidden;
+}
+
+@screen lg {
+  .content.container {
+    width: 90%;
   }
 }
 </style>

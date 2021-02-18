@@ -16,12 +16,12 @@
       </div>
       <div class="account-dropdown" :class="accountOpen ? 'open' : ''">
         <div class="account-dropdown-btn">
-          <account-circle-icon class="mr-2 SvgIcon--32" />
+          <account-circle-icon class="mr-2 SvgIcon--24" />
           Mon Compte
         </div>
         <div class="account-dropdown-line" />
         <div class="account-dropdown-btn" @click="logout">
-          <power-icon class="mr-2 SvgIcon--32" />
+          <power-icon class="mr-2 SvgIcon--24" />
           Déconnexion
         </div>
       </div>
@@ -68,7 +68,7 @@ export default {
 }
 
 .account-dropdown {
-  @apply absolute right-0 w-full transition duration-500 ease-in opacity-0 pointer-events-none bg-blue-light;
+  @apply absolute right-0 w-full transition duration-500 ease-in opacity-0 pointer-events-none bg-blue-light z-50;
 }
 
 .account-dropdown.open {
