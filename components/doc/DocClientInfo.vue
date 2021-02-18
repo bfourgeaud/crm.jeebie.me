@@ -17,9 +17,11 @@
           <b>{{ client.isCompany ? client.company.name : `${client.contact.firstname} ${client.contact.lastname}` }}</b>
         </div>
         <div v-if="client.isCompany">
-          <b>{{ client.contact.firstname }}</b>
+          <b>{{ `${client.contact.firstname} ${client.contact.lastname}` }}</b>
         </div>
-        <div>{{ client.isCompany ? `${client.company.addr}` : `${client.contact.addr}` }}</div>
+        <div>{{ formatAddr(client).street }}</div>
+        <div>{{ formatAddr(client).line2 }}</div>
+        <div>{{ client.contact.email }}</div>
         <div />
       </div>
       <div class="clients-box-print-edit">
@@ -67,6 +69,17 @@ export default {
     edit () {
       this.choose = true
       this.client = null
+    },
+    formatAddr (client) {
+      const addrField = client.isCompany ? client.company.addr : client.contact.addr
+      const exact = addrField.exact ? addrField.exact.properties : null
+      return {
+        street: exact ? `${exact.housenumber || ''} ${exact.street || exact.name || ''}` : addrField.text,
+        postcode: exact ? exact.postcode || '' : '',
+        city: exact ? exact.city || exact.state || '' : '',
+        country: exact ? exact.country || '' : '',
+        line2: exact ? `${exact.postcode || ''} ${exact.city || exact.state || ''}, ${exact.country || ''}` : ''
+      }
     }
   }
 }
