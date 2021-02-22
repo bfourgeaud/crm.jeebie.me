@@ -5,7 +5,7 @@
     :style="`width:${size}px; height:${size}px;`"
     @click="$emit('click')"
   >
-    <component :is="`${icon}-icon`" :style="iconStyles" />
+    <component :is="component" :style="iconStyles" />
     <slot />
   </div>
 </template>
@@ -19,11 +19,38 @@ export default {
     size: { type: Number, default: 24 },
     raised: { type: Boolean, default: false }
   },
+  data () {
+    return {
+      component: null
+    }
+  },
   computed: {
     iconStyles () {
       return {
         height: this.rounded ? this.size / 2 : this.size
       }
+    },
+    loader () {
+      if (!this.icon) {
+        return null
+      }
+      return () => import('@/components/icons/' + this.formatIconName(this.icon))
+    }
+  },
+  mounted () {
+    this.loader()
+      .then(() => {
+        this.component = () => this.loader()
+      })
+      .catch(() => {
+        this.component = () => import('@/components/icons/HomeIcon')
+      })
+  },
+  methods: {
+    formatIconName (name) {
+      const camelCased = name.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase() })
+      const upperCased = camelCased.charAt(0).toUpperCase() + camelCased.slice(1)
+      return `${upperCased}Icon`
     }
   }
 }

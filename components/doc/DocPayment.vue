@@ -16,19 +16,19 @@
       </div>
     </div>
     <div class="edit-btn" @click="edit = true">
-      <EditIcon class="text-blue-light SvgIcon--24" />
+      <BaseIcon icon="edit" :size="24" class="cursor-pointer text-blue-light" />
     </div>
   </div>
   <div v-else class="edit-container">
     <AppInput class="mb-4" placeholder="Mode de paiement" />
     <AppInput class="my-4" placeholder="Entrez ici vos conditions, pénalités de retard, etc ..." />
     <div class="my-4 flex justify-center">
-      <AppBtn class="mr-4" @click="cancel">
+      <BaseBtn class="mr-4 bg-error text-white hover:bg-red-dark" @click="cancel">
         Annuler
-      </AppBtn>
-      <AppBtn class="ml-4" @click="add">
+      </BaseBtn>
+      <BaseBtn class="ml-4 bg-success text-white" @click="add">
         Valider
-      </AppBtn>
+      </BaseBtn>
     </div>
   </div>
 </template>

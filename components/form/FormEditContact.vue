@@ -8,7 +8,14 @@
       <BaseInput v-model="contact.mobile" type="text" name="mobile" placeholder="Téléphone Mobile" />
       <BaseInput v-model="contact.phone" type="text" name="phone" placeholder="Téléphone Fixe" />
       <BaseInput v-model="contact.email" type="email" name="email" placeholder="Adresse e-mail" class="col-span-2" />
-      <AppInputAddress v-if="!noAddr" v-model="contact.addr" type="text" name="addr" placeholder="Adresse postale" class="col-span-2" />
+      <AppInputAddress
+        v-if="!noAddr"
+        v-model="contact.addr"
+        type="text"
+        name="addr"
+        placeholder="Adresse postale"
+        class="col-span-2"
+      />
     </div>
   </div>
 </template>

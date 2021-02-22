@@ -10,18 +10,18 @@
       </BaseBtn>
     </div>
 
-    <BaseCard v-for="item in filteredClients" :key="item.id" :elevation="1" :to="`/clients/${item.id}`" class="flex group hover:bg-blue-100 hover:text-blue-light">
+    <BaseCard v-for="item in filteredClients" :key="item.id" :elevation="1" :to="`/clients/${item.id}`" class="flex mx-1 group hover:bg-blue-100 hover:text-blue-light">
       <BaseCardTitle class="flex items-center">
         <BaseIcon :icon="item.isCompany ? 'company' :'person'" :size="32" class="mr-4 bg-blue-100 text-white group-hover:bg-blue-light" rounded />
         <p class="text-base font-bold">
           {{ item.isCompany ? item.company.name : fullName(item.contact.firstname, item.contact.lastname) }}
         </p>
-        <ChevronIcon class="mx-2 SvgIcon--32" right />
+        <BaseIcon icon="chevron-right" :size="32" class="mx-2" />
       </BaseCardTitle>
       <BaseSpacer />
       <BaseCardActions>
-        <EditIcon class="SvgIcon--24 text-blue-light hover:text-blue-dark" @click.native.prevent="editItem(item)" />
-        <DeleteIcon class="SvgIcon--24 text-red-light hover:text-red-dark ml-4" @click.native.prevent="deleteItem(item)" />
+        <BaseIcon icon="edit" :size="24" class="text-blue-light hover:text-blue-dark" @click.native.prevent="editItem(item)" />
+        <BaseIcon icon="delete" :size="24" class="text-red-light hover:text-red-dark ml-4" @click.native.prevent="deleteItem(item)" />
       </BaseCardActions>
     </BaseCard>
 
@@ -54,8 +54,8 @@ export default {
   created () { this.fetchClients() },
   methods: {
     ...mapActions('clients', ['fetchClients', 'removeClient']),
-    editItem (id) {
-      alert(`Editing ${id}`)
+    editItem (item) {
+      this.$router.push({ name: 'clients-edit', params: { client: item } })
     },
     async deleteItem (item) {
       const ok = await this.$refs.confirmDialog.show({

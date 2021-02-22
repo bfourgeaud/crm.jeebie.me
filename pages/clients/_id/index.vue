@@ -5,15 +5,19 @@
         <div class="flex items-center justify-items-start">
           <BaseIcon :icon="client.isCompany ? 'company' :'person'" :size="64" class="bg-blue-100 text-blue-light flex-shrink-0" rounded />
           <div class="text-opacity-dark text-base p-2 lg:p-4 flex-shrink">
-            <div class="text-black">{{ client.contact.firstname }} {{ client.contact.lastname }}</div>
-            <div v-if="client.isCompany" class="text-black">{{ client.company.name }}</div>
+            <div class="text-black">
+              {{ client.contact.firstname }} {{ client.contact.lastname }}
+            </div>
+            <div v-if="client.isCompany" class="text-black">
+              {{ client.company.name }}
+            </div>
             <div>{{ formatAddr(client).street }}</div>
             <div>{{ formatAddr(client).line2 }}</div>
             <a :href="`mailto:${client.contact.email}`" class="underline">{{ client.contact.email }}</a>
           </div>
           <BaseCardActions class="mx-4">
-            <EditIcon class="cursor-pointer SvgIcon--24 text-blue-light hover:text-blue-dark" @click.native="editClient" />
-            <DeleteIcon class="cursor-pointer SvgIcon--24 text-red-light hover:text-red-dark ml-4" @click.native="deleteClient" />
+            <BaseIcon icon="edit" :size="24" class="cursor-pointer text-blue-light hover:text-blue-dark" @click.native="editClient" />
+            <BaseIcon icon="delete" :size="24" class="cursor-pointer text-red-light hover:text-red-dark ml-4" @click.native="deleteClient" />
           </BaseCardActions>
         </div>
         <BaseSpacer />
@@ -22,7 +26,7 @@
             <BaseIcon icon="plus" :size="14" class="mr-2" />
             Nouveau Devis
           </BaseBtn>
-          <BaseBtn class="border text-white bg-success hover:bg-transparent hover:text-success" rounded :to="`/clients/${client.id}/invoice/new`" large>
+          <BaseBtn class="border text-white bg-success hover:bg-transparent hover:text-success" rounded :to="{ name: 'invoices-new', params: { user: client }}" large>
             <BaseIcon icon="plus" :size="14" class="mr-2" />
             Nouvelle Facture
           </BaseBtn>
@@ -31,19 +35,25 @@
 
       <AppFilters v-model="selectedFilters" :items="filters" class="my-8 mx-2 md:mx-8 lg:mx-0" />
 
-      <BaseCard v-for="item in filteredItems" :key="item.id" to="#" :elevation="2" class="py-2 flex items-center hover:bg-blue-100 hover:text-blue-light">
-        <AccountCircleIcon class="mx-4 SvgIcon--32 text-red-light" />
+      <BaseCard v-for="item in filteredItems" :key="item.id" to="#" :elevation="2" class="py-2 mx-2 flex items-center hover:bg-blue-100 hover:text-blue-light">
+        <BaseIcon :icon="item.type" :size="32" class="text-white mx-4" :class="getItemIconColor(item)" rounded />
         <div>
-          <p>{{ item.name }}</p>
-          <p class="text-opacity-dark">{{ item.date }}</p>
+          <p>{{ item.title }}</p>
+          <p class="text-opacity-dark">
+            {{ item.date }}
+          </p>
         </div>
         <BaseSpacer />
         <BaseCardActions>
-          <p class="mx-4 uppercase" :class="statusClass(item.status)">{{ item.status }}</p>
-          <p class="hidden md:block mx-4 text-opacity-400">{{ item.amount }} €</p>
+          <p class="mx-4 uppercase" :class="statusClass(item.status)">
+            {{ item.status }}
+          </p>
+          <p class="hidden md:block mx-4 text-opacity-400">
+            {{ item.amount }} €
+          </p>
           <BaseSpacer />
-          <EditIcon class="SvgIcon--24 text-blue-light hover:text-blue-dark mr-2" @click.native.prevent="editItem(item)" />
-          <DeleteIcon class="SvgIcon--24 text-red-light hover:text-red-dark" @click.native.prevent="deleteItem(item)" />
+          <BaseIcon icon="edit" :size="24" class="text-blue-light hover:text-blue-dark mr-2" @click.native.prevent="editItem(item)" />
+          <BaseIcon icon="delete" :size="24" class="text-red-light hover:text-red-dark" @click.native.prevent="deleteItem(item)" />
         </BaseCardActions>
       </BaseCard>
 
@@ -70,25 +80,8 @@ export default {
         'Factures'
       ],
       selectedFilters: 'Tous',
-      /* TODO : DEL */
-      devis: [
-        {
-          id: '1',
-          name: 'Prestations Janvier 2021',
-          date: '31/08/2020',
-          status: 'envoyée',
-          amount: 630
-        }
-      ],
-      factures: [
-        {
-          id: '2',
-          name: 'Facture Sans titre',
-          date: '31/08/2020',
-          status: 'brouillon',
-          amount: 2
-        }
-      ]
+      devis: [],
+      factures: []
     }
   },
   computed: {
@@ -102,9 +95,28 @@ export default {
     }
   },
   created () {
+    const clientFound = (result) => {
+      this.client = result
+
+      this.$dbs.invoices.query(
+        'client.id',
+        '==',
+        result.id,
+        (result) => {
+          this.factures = result.map(function (el) {
+            const o = Object.assign({}, el)
+            o.type = 'invoice'
+            o.status = 'brouillon'
+            return o
+          })
+        },
+        (error) => { this.error = error }
+      )
+    }
+
     this.$dbs.clients.find(
       this.$route.params.id,
-      (result) => { this.client = result },
+      clientFound,
       (error) => { this.error = error }
     )
   },
@@ -117,7 +129,7 @@ export default {
       alert('Delete Item !')
     },
     editClient () {
-      alert('Edit Client !')
+      this.$router.push({ name: 'clients-edit', params: { client: this.client } })
     },
     async deleteClient () {
       const ok = await this.$refs.confirmDialog.show({
@@ -149,6 +161,14 @@ export default {
         city: exact ? exact.city || exact.state || '' : '',
         country: exact ? exact.country || '' : '',
         line2: exact ? `${exact.postcode || ''} ${exact.city || exact.state || ''}, ${exact.country || ''}` : ''
+      }
+    },
+    getItemIconColor (item) {
+      switch (item.type) {
+        case 'invoice' :
+          return 'bg-success'
+        case 'quote' :
+          return 'bg-warning'
       }
     }
   }

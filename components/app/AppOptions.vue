@@ -28,11 +28,7 @@ export default {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   margin: 0 1rem;
 }
@@ -44,7 +40,7 @@ export default {
   right: -15px;
   @apply bg-white;
   @apply rounded-md;
-  @apply whitespace-no-wrap;
+  @apply whitespace-nowrap;
   box-shadow: 1px 1px 5px 0 rgb(80 80 80 / 50%);
   @apply z-50;
 

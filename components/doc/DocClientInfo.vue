@@ -8,7 +8,7 @@
       </div>
 
       <div v-else class="client-box-edit">
-        <DocClientSelect @select="select" />
+        <DocClientSelect @select="select" @close="choose = false" />
       </div>
     </div>
     <div v-else class="clients-box-print">
@@ -26,7 +26,7 @@
       </div>
       <div class="clients-box-print-edit">
         <div class="edit-toggle" @click="edit">
-          <EditIcon class="cursor-pointer ml-2 text-blue-light SvgIcon--32" />
+          <BaseIcon icon="edit" :size="24" class="cursor-pointer ml-2 text-blue-light" />
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@ export default {
       },
       set (val) {
         this.lazyValue = val
-        this.$emit('input', val)
+        this.$emit('update', val)
       }
     }
   },

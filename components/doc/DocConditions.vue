@@ -5,18 +5,18 @@
       {{ conditions }}
     </div>
     <div class="edit-btn" @click="edit = true">
-      <EditIcon class="text-blue-light SvgIcon--32" />
+      <BaseIcon icon="edit" :size="24" class="cursor-pointer text-blue-light" />
     </div>
   </div>
   <div v-else class="edit-container">
     <AppInput v-model="editedValue" class="my-4" placeholder="Entrez ici vos conditions, pénalités de retard, etc ..." />
     <div class="my-4 flex justify-center">
-      <AppBtn class="mr-4" @click="cancel">
+      <BaseBtn class="mr-4 bg-error text-white hover:bg-red-dark" @click="cancel">
         Annuler
-      </AppBtn>
-      <AppBtn class="ml-4" @click="add">
+      </BaseBtn>
+      <BaseBtn class="ml-4 bg-success text-white hover:bg-blue" @click="add">
         Valider
-      </AppBtn>
+      </BaseBtn>
     </div>
   </div>
 </template>
@@ -25,10 +25,7 @@
 export default {
   name: 'DocConditions',
   props: {
-    value: {
-      type: String,
-      default: 'Taux de pénalités exigibles de plein droit et sans rappel préalable en cas de paiement à une date ultérieure à celle figurant sur la facture : 10,00% , Indemnité forfaitaire pour frais de recouvrement en cas de paiement à une date ultérieure à celle figurant sur la facture : 40,00€. Si les frais de recouvrement sont supérieurs à ce montant, une indemnisation complémentaire sera due, sur présentation des justificatifs.'
-    }
+    value: { type: String, default: '' }
   },
   data () {
     return {

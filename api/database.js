@@ -6,9 +6,7 @@ export default $fire => collection => ({
         clients.push({ id: doc.id, ...doc.data() })
       })
       found(clients)
-    }).catch((error) => {
-      err(error)
-    })
+    }).catch(err)
   },
 
   create (payload, ok, err) {
@@ -23,9 +21,17 @@ export default $fire => collection => ({
       } else {
         err('No such document!')
       }
-    }).catch((error) => {
-      err(error)
-    })
+    }).catch(err)
+  },
+
+  query (left, operator, right, ok, err) {
+    const results = []
+    $fire.firestore.collection(collection).where(left, operator, right).get().then((snapshot) => {
+      snapshot.forEach((doc) => {
+        results.push({ id: doc.id, ...doc.data() })
+      })
+      ok(results)
+    }).catch(err)
   },
 
   update (payload, id, ok, err) {

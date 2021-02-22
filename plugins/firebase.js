@@ -4,7 +4,8 @@ export default (ctx, inject) => {
   const firebaseDB = database(ctx.$fire)
 
   const dbs = {
-    clients: firebaseDB('clients')
+    clients: firebaseDB('clients'),
+    invoices: firebaseDB('invoices')
   }
 
   inject('dbs', dbs)

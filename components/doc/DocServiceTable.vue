@@ -17,7 +17,7 @@
           {{ val }}
           <div v-if="colIdx === Object.keys(row).length-1" class="div">
             <div class="edit" @click="editItem(rowIdx)">
-              <EditIcon class="ml-2 text-blue-light SvgIcon--24" />
+              <BaseIcon icon="edit" :size="24" class="ml-2 text-blue-light" />
             </div>
           </div>
         </slot>
@@ -31,8 +31,12 @@
         <AppInput v-model="editedItem.unitPrice" placeholder="Tarif unitaire" type="number" class="ml-4 flex-1" />
       </div>
       <div class="my-4 flex justify-center">
-        <AppBtn class="mr-4" @click="cancel">Annuler</AppBtn>
-        <AppBtn class="ml-4" @click="add">Valider</AppBtn>
+        <BaseBtn class="mr-4 bg-error text-white hover:bg-red-dark" @click="cancel">
+          Annuler
+        </BaseBtn>
+        <BaseBtn class="ml-4 bg-success text-white" @click="add">
+          Valider
+        </BaseBtn>
       </div>
     </div>
     <DocAddBox class="col-span-4 after" @click="edit = true">
@@ -83,6 +87,7 @@ export default {
       this.items.push({ ...this.editedItem, totalPrice })
       this.editedItem = this.reseteditedItem()
       this.edit = false
+      this.$emit('input', this.items)
     },
     cancel () {
       this.editedItem = this.reseteditedItem()

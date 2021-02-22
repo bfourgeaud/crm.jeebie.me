@@ -1,28 +1,38 @@
 <template>
   <div class="client-select">
-    <AppCard class="card-style">
-      <AppDataList :items="clients">
-        <AppBtn slot="header" class="flex justify-between items-center mb-2" to="/clients/edit">
-          <AccountCircleIcon class="SvgIcon--24 ml-2 text-blue-100" />
+    <BaseCard class="flex flex-col my-4 p-2 mx-1 overflow-y-auto bg-white" :elevation="3" rounded>
+      <BaseBtn right x-bold x-small class="text-error" @click="$emit('close')">
+        X
+      </BaseBtn>
+      <BaseBtn :to="{ name: 'clients-edit' }" left class="flex justify-start items-center whitespace-no-wrap bg-white text-blue-light hover:bg-blue-light hover:text-white shadow-3">
+        <BaseIcon icon="account-circle" :size="24" class="mr-2" />
+        <p class="uppercase">
           Nouvau client
-        </AppBtn>
-        <AppBtn slot-scope="row" class="flex justify-between items-center mb-2 text-blue-light" outlined @click="$emit('select', row.item)">
-          <AccountCircleIcon class="SvgIcon--24 ml-2" />
-          {{ row.item.isCompany ? row.item.company.name : `${row.item.contact.firstname} ${row.item.contact.lastname}` }}
-        </AppBtn>
-      </AppDataList>
-    </AppCard>
+        </p>
+      </BaseBtn>
+
+      <BaseBtn v-for="client in clients" :key="client.id" left class="flex justify-start items-center whitespace-no-wrap bg-white text-blue-light hover:bg-blue-light hover:text-white shadow-3 mt-1" @click="$emit('select', client)">
+        <BaseIcon icon="account-circle" :size="24" class="mr-2" />
+        <p class="uppercase">
+          {{ client.isCompany ? client.company.name : `${client.contact.firstname} ${client.contact.lastname}` }}
+        </p>
+      </BaseBtn>
+    </BaseCard>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'DocClientSelect',
   computed: {
     ...mapState('clients', ['clients'])
-  }
+  },
+  created () {
+    this.fetchClients()
+  },
+  methods: { ...mapActions('clients', ['fetchClients']) }
 }
 </script>
 
@@ -57,9 +67,6 @@ export default {
   padding: 1rem;
   margin: 2rem 0;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
 }
 </style>

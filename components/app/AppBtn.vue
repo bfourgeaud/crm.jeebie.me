@@ -103,7 +103,7 @@ export default {
   @apply px-8;
   @apply mx-4;
   @apply uppercase;
-  @apply whitespace-no-wrap;
+  @apply whitespace-nowrap;
   @apply shadow-md;
   @apply h-8;
   @apply inline-block;

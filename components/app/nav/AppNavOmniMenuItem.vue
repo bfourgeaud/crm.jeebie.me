@@ -17,7 +17,7 @@ export default {
     iconSize: { type: Number, default: 33 },
     iconBg: { type: String, default: 'bg-blue-100' },
     iconColor: { type: String, default: 'text-white' },
-    to: { type: String, default: '#' }
+    to: { type: [String, Object], default: '#' }
   },
   methods: { ...mapMutations('app', ['RESET_OMNI']) }
 }

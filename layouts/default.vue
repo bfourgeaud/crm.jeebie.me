@@ -7,16 +7,7 @@
   </div>
 </template>
 
-<style>
-body {
-  overflow: hidden;
-  font-weight: 700;
-  color: white;
-  font-size: 0.875rem;
-  line-height: 1.25;
-  background-color: #f8fbff;
-}
-
+<style scoped>
 .app-layout {
   height: 100vh;
   width: 100%;
@@ -40,23 +31,6 @@ body {
   grid-area: content;
 }
 
-/* DELETE */
-.SvgIcon--24{
-  height: 24px;
-}
-
-.SvgIcon--32 {
-  height: 32px;
-}
-
-.SvgIcon--40 {
-  height: 40px;
-}
-
-.SvgIcon--64 {
-  height: 64px;
-}
-
 /*
 * Change Layout on larger screens
 */
@@ -67,18 +41,6 @@ body {
                          "nav content";
     grid-template-rows: 70px 1fr;
     grid-template-columns: 220px 1fr;
-  }
-}
-
-/* PUT GLOBAL */
-.content.container {
-  @apply w-full;
-  @apply overflow-x-hidden;
-}
-
-@screen lg {
-  .content.container {
-    width: 90%;
   }
 }
 </style>

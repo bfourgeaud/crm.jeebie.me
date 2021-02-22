@@ -1,58 +1,46 @@
 <template>
-  <AppCard class="editor">
+  <BaseCard class="editor" :elevation="6" rounded>
     <div class="status">
       <span>Edité le dimanche 14 février 2021</span>
     </div>
     <DocCompanyInfo class="self" />
-    <DocClientInfo v-model="invoice.client" class="client" />
-    <DocFieldEdit v-model="invoice.title" class="title">
+    <DocClientInfo :value="client" class="client" @update="SET_CLIENT" />
+    <DocFieldEdit :value="title" class="title" @input="SET_TITLE">
       Ajouter un titre
     </DocFieldEdit>
-    <DocServiceTable v-model="invoice.articles" />
-    <DocPriceBox v-model="invoice.total" class="total" />
-    <DocPayment class="payment" />
-    <DocConditions class="conditions" />
-  </AppCard>
+    <DocServiceTable :value="articles" @input="SET_ARTICLES" />
+    <DocPriceBox :value="total" class="total" />
+    <DocPayment :value="paymentMethod" class="payment" @input="SET_PAYMENT" />
+    <DocConditions :value="conditions" class="conditions" @input="SET_CONDITIONS" />
+  </BaseCard>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
+
 export default {
   name: 'DocInvoice',
-  props: { value: { type: Object, default: () => ({}) } },
-  data () {
-    return {
-      lazyInvoice: this.calcTotal(this.value)
-    }
-  },
   computed: {
-    invoice: {
-      get () {
-        return this.lazyInvoice
-      },
-      set (val) {
-        this.lazyInvoice = this.calcTotal(val)
-        this.$emit('input', this.lazyInvoice)
-      }
-    }
-  },
-  watch: {
-    value: {
-      handler (val) {
-        this.lazyInvoice = this.calcTotal(val)
-      },
-      deep: true
-    }
+    ...mapState('invoice', [
+      'company',
+      'client',
+      'title',
+      'articles',
+      'dateOverdue',
+      'paymentMethod',
+      'total',
+      'conditions'
+    ])
   },
   methods: {
-    calcTotal (val) {
-      const totalHT = val.articles.reduce((a, b) => a + (b.totalPrice || 0), 0)
-      const tva = val.tva
-      const totalTTC = totalHT - (totalHT * (tva || 0) / 100)
-      return {
-        ...val,
-        total: { totalHT, tva, totalTTC }
-      }
-    }
+    ...mapMutations('invoice', [
+      'SET_CLIENT',
+      'SET_TITLE',
+      'SET_ARTICLES',
+      'SET_DATE_OVER',
+      'SET_PAYMENT',
+      'SET_CONDITIONS'
+    ])
   }
 }
 </script>

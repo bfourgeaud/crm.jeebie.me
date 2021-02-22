@@ -5,14 +5,14 @@
   <div v-else-if="!edit && input">
     {{ input }}
     <div class="edit-toggle" @click="edit = true">
-      <EditIcon class="cursor-pointer ml-2 text-blue-light SvgIcon--24" />
+      <BaseIcon icon="edit" :size="24" class="cursor-pointer ml-2 text-blue-light" />
     </div>
   </div>
   <div v-else class="input-group">
-    <AppInput v-model="input" class="flex-1" />
-    <AppBtn class="mx-4" @click="edit = false">
+    <BaseInput v-model="input" class="flex-1" />
+    <BaseBtn large class="mx-4 bg-blue-light text-white hover:bg-blue-DEFAULT" @click="edit = false">
       Valider
-    </AppBtn>
+    </BaseBtn>
   </div>
 </template>
 

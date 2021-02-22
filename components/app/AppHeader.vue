@@ -11,17 +11,17 @@
           <span class="uppercase">BENJAMIN</span>
         </div>
         <div class="icon-toggle" :class="accountOpen ? 'open' : ''">
-          <chevron-icon down />
+          <BaseIcon icon="chevron-down" :size="24" />
         </div>
       </div>
       <div class="account-dropdown" :class="accountOpen ? 'open' : ''">
         <div class="account-dropdown-btn">
-          <account-circle-icon class="mr-2 SvgIcon--24" />
+          <BaseIcon icon="account-circle" :size="24" class="mr-2" />
           Mon Compte
         </div>
         <div class="account-dropdown-line" />
         <div class="account-dropdown-btn" @click="logout">
-          <power-icon class="mr-2 SvgIcon--24" />
+          <BaseIcon icon="power" :size="24" class="mr-2" />
           Déconnexion
         </div>
       </div>
@@ -58,7 +58,7 @@ export default {
 
 <style scoped>
 .account {
-  @apply relative mr-8 px-6 h-full bg-blue-DEFAULT;
+  @apply relative mr-8 px-6 h-full bg-blue;
 }
 .account-container {
   @apply flex items-center cursor-pointer h-full pl-4;

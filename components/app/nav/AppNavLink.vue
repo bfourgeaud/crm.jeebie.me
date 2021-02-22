@@ -9,7 +9,7 @@
       </span>
     </div>
     <div class="chevron hidden mr-4 items-center justify-center">
-      <chevron-icon right />
+      <BaseIcon icon="chevron-right" :size="24" />
     </div>
   </nuxt-link>
 </template>

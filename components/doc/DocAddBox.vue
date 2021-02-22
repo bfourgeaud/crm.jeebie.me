@@ -1,6 +1,6 @@
 <template>
-  <div class="add-box" :class="center ? 'center' : ''" @click="$emit('click')">
-    <AddCircleIcon class="SvgIcon--32 add" />
+  <div class="add-box cursor-pointer" :class="center ? 'justify-center' : 'pl-8'" @click="$emit('click')">
+    <BaseIcon icon="plus" :size="28" rounded class="mr-4 text-white bg-blue-light" />
     <slot />
   </div>
 </template>
@@ -32,33 +32,11 @@ export default {
 
 .add-box.after {
   @apply border-t-0;
-}
-
-.add-box:hover {
-  @apply cursor-pointer;
-}
-
-.add-box.center {
-  @apply justify-center;
-}
-
-.add-box:not(.center) {
-  @apply pl-8;
-}
-
-.add-box .add {
-  /*
-  @apply bg-white;
-  */
-  @apply rounded-full;
-  @apply flex;
-  @apply items-center;
-  @apply justify-center;
-  @apply font-extrabold;
-  @apply mr-4;
-}
-
-.add-box.after {
   @apply rounded-t-none;
+}
+
+.add-box.before {
+  @apply border-b-0;
+  @apply rounded-b-none;
 }
 </style>

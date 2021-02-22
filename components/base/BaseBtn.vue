@@ -25,6 +25,8 @@ export default {
     elevation: { type: Number, default: 0 },
     bold: { type: Boolean, default: false },
     xBold: { type: Boolean, default: false },
+    left: { type: Boolean, default: false },
+    right: { type: Boolean, default: false },
 
     icon: { type: Boolean, default: false }, /* TODO */
     outlined: { type: Boolean, default: false },
@@ -33,7 +35,7 @@ export default {
     text: { type: Boolean, default: false },
     tile: { type: Boolean, default: false },
 
-    to: { type: String, default: null }
+    to: { type: [String, Object], default: null }
   },
   computed: {
     classes () {
@@ -57,7 +59,10 @@ export default {
         'btn--icon': this.icon,
         'btn--bold': this.bold,
         'btn--xbold': this.xBold,
-        'btn--size-unset': this.sizeInherit
+        'btn--size-unset': this.sizeInherit,
+        'justify-start': this.left,
+        'justify-end': this.right,
+        'justify-center': !this.left && !this.right
       }
     }
   }
@@ -73,10 +78,9 @@ export default {
   @apply inline-flex;
   @apply font-medium;
   @apply tracking-wider;
-  @apply justify-center;
   @apply relative;
   @apply uppercase;
-  @apply whitespace-no-wrap;
+  @apply whitespace-nowrap;
 }
 
 .btn.btn--bold {
